@@ -10,4 +10,4 @@ ver=$( jq -n \
                 --arg dl "$days_left" \
                 '{days_left: $dl}' )
 
-echo $ver
+echo $ver >&3
