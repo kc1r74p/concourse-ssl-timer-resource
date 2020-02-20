@@ -1,5 +1,5 @@
 #!/bin/sh
 days_left=$($(dirname $0)/check_cert.sh google.com)
 
-echo '["days_left"=${days_left}]'
+echo '{"version": ${days_left}}'
 
