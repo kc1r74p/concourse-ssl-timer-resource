@@ -30,8 +30,8 @@ if [ "$#" -eq "1" ]; then
     if [ "$certificate_size" -gt "1" ]; then
       date=$(openssl x509 -in $certificate_file -enddate -noout | sed "s/.*=\(.*\)/\1/")
       date_s=$(date -d "${date}" +%s)
-      now_s=$(date -d now +%s)
-      date_diff=$(( (date_s - now_s) / 86400 ))
+      now_s=$(date +%s)
+      date_diff=$(((date_s - now_s) / 86400 ))
       echo "$date_diff"
       if [ "$date_s" -gt "$now_s" ]; then
         exit 0 # ok
