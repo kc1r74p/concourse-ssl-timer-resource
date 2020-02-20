@@ -1,5 +1,5 @@
 #!/bin/bash
-days_left=$($(dirname $0)/check_cert.sh google.com)
+days_left=$($(dirname $0)/days_left.sh google.com)
 
 ver=$( jq -n \
                 --arg dl "$days_left" \
