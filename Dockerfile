@@ -1,6 +1,10 @@
 FROM alpine:latest
 LABEL maintainer="Patrick M."
 
+# coreutils for date -d
+# bash
+# bind-tools for host
+# openssl for cert checks
 RUN apk upgrade --update-cache --available && \
     apk add coreutils bash bind-tools openssl && \
     rm -rf /var/cache/apk/*
