@@ -1,8 +1,13 @@
 #!/bin/bash
+set -e
+
+exec 3>&1 # make stdout available as fd 3 for the result
+exec 1>&2 # redirect all output to stderr for logging
+
 days_left=$($(dirname $0)/days_left.sh google.com)
 
 #ver=$( jq -n \
 #                --arg dl "$days_left" \
 #                '{version: {days_left: $dl}}' )
 
-echo "[days_left=$days_left]"
+echo '["days_left"="'$days_left'"]'
