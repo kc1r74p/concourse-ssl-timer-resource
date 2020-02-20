@@ -3,7 +3,7 @@ days_left=$($(dirname $0)/check_cert.sh google.com)
 
 ver=$( jq -n \
                 --arg dl "$days_left" \
-                '{"version":{"days-left":"$days_left"}}' )
+                '{"version":{"days-left":"$dl"}}' )
 
 echo $ver
 
