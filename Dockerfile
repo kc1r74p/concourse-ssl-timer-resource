@@ -5,8 +5,9 @@ LABEL maintainer="Patrick M."
 # bash
 # bind-tools for host
 # openssl for cert checks
+# jq for json transforms
 RUN apk upgrade --update-cache --available && \
-    apk add coreutils bash bind-tools openssl && \
+    apk add coreutils bash jq bind-tools openssl && \
     rm -rf /var/cache/apk/*
 
 COPY ./assets/* /opt/resource/

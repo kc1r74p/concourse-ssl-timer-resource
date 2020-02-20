@@ -1,5 +1,9 @@
 #!/bin/sh
 days_left=$($(dirname $0)/check_cert.sh google.com)
 
-echo '{"version": '"$days_left"'}'
+ver=$( jq -n \
+                --arg dl "$days_left" \
+                '{"version":{"days-left":"$days_left"}}' )
+
+echo $ver
 
