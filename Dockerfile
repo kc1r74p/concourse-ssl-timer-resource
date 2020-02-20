@@ -8,7 +8,8 @@ RUN apk upgrade --update-cache --available && \
 COPY ./assets/* /opt/resource/
 
 RUN chmod 755 /opt/resource/check \
+    && chmod +x /opt/resource/days_left.sh \
     && chmod +x /opt/resource/in \
     && chmod +x /opt/resource/out
 
-RUN /opt/resource/check/days_left.sh google.com
+RUN /opt/resource/days_left.sh google.com
