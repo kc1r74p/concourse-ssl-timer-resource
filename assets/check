@@ -8,6 +8,6 @@ days_left=$($(dirname $0)/days_left.sh google.com)
 
 ver=$( jq -n \
                 --arg dl "$days_left" \
-                '{days_left: $dl}' )
+                '{version: {ref: $dl}}' )
 
 echo $ver >&3
