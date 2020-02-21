@@ -30,7 +30,7 @@ ver=$( jq -n \
                 --arg L "$L" \
                 --arg ST "$ST" \
                 --arg C "$C" \
-                '{days_left: $dl, metadata: { CN: $CN, O: $O, L: $L, ST: $ST, C: $C } }' )
+                '{days_left: $dl, metadata: [ CN: $CN, O: $O, L: $L, ST: $ST, C: $C ] }' )
 
 trap "unlink $certificate_file" EXIT
 echo $ver >&3
