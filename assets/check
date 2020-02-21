@@ -9,6 +9,7 @@ PATH=/usr/local/bin:$PATH
 
 payload=$TMPDIR/ssl-resource
 cat > $payload <&0
+
 dns=$(jq -r '.source.dns // ""' < $payload)
 
 certificate_file=$(mktemp)

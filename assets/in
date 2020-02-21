@@ -10,11 +10,11 @@ PATH=/usr/local/bin:$PATH
 payload=$TMPDIR/ssl-resource
 cat > $payload <&0
 dns=$(jq -r '.source.dns // ""' < $payload)
+days_left=$(jq -r '.version.days_left // "HEAD"' < $payload)
 
 certificate_file=$(mktemp)
 echo -n | openssl s_client -servername "$dns" -connect "$dns":443 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $certificate_file
 
-days_left=$($(dirname $0)/days_left.sh $dns $certificate_file)
 
 info=$(certtool -i < $certificate_file | egrep "^\s+Subject:")
 CN=$(echo "$info" | grep -o "CN=.*" | cut -d'=' -f2- | cut -d',' -f1 )
@@ -30,7 +30,7 @@ ver=$( jq -n \
                 --arg L "$L" \
                 --arg ST "$ST" \
                 --arg C "$C" \
-                '[{version: {days: $dl}, metadata: { CN: $CN, O: $O, L: $L, ST: $ST, C: $C } }]' )
+                '[{days_left: $dl, metadata: { CN: $CN, O: $O, L: $L, ST: $ST, C: $C } }]' )
 
 trap "unlink $certificate_file" EXIT
 echo $ver >&3
