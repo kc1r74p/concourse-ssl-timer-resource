@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # https://blog.sleeplessbeastie.eu/2017/04/03/how-to-display-days-till-certificate-expiration/
 # Print the number of days till certificate expiration
 #
@@ -15,11 +16,7 @@
 #   255 - DNS resolution failed
 #
 
-# temporary file to store certificate
-certificate_file=$(mktemp)
-
-# delete temporary file on exit
-trap "unlink $certificate_file" EXIT
+certificate_file = $2
 
 if [ "$#" -eq "1" ]; then
   website="$1"

@@ -11,10 +11,26 @@ payload=$TMPDIR/ssl-resource
 cat > $payload <&0
 dns=$(jq -r '.source.dns // ""' < $payload)
 
-days_left=$($(dirname $0)/days_left.sh $dns)
+certificate_file=$(mktemp)
+trap "unlink $certificate_file" EXIT
+echo -n | openssl s_client -servername "$dns" -connect "$dns":443 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $certificate_file
+
+days_left=$($(dirname $0)/days_left.sh $dns $certificate_file)
+
+info=$(certtool -i < $certificate_file | egrep "^\s+Subject:")
+CN=$(echo "$info" | grep -o "CN=.*" | cut -d'=' -f2- | cut -d',' -f1 )
+O=$(echo "$info" | grep -o "O=.*" | cut -d'=' -f2- | cut -d',' -f1 )
+L=$(echo "$info" | grep -o "L=.*" | cut -d'=' -f2- | cut -d',' -f1 )
+ST=$(echo "$info" | grep -o "ST=.*" | cut -d'=' -f2- | cut -d',' -f1 )
+C=$(echo "$info" | grep -o "C=.*" | cut -d'=' -f2- | cut -d',' -f1 )
 
 ver=$( jq -n \
                 --arg dl "$days_left" \
-                '[{days_left: $dl}]' )
+                --arg CN "$CN" \
+                --arg O "$O" \
+                --arg L "$L" \
+                --arg ST "$ST" \
+                --arg C "$C" \
+                '[{version: {days: $dl}, metadata: { CN: $CN, O: $O, L: $L, ST: $ST, C: $C } }]' )
 
 echo $ver >&3
