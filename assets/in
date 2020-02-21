@@ -15,13 +15,14 @@ days_left=$(jq -r '.version.days_left // "HEAD"' < $payload)
 certificate_file=$(mktemp)
 echo -n | openssl s_client -servername "$dns" -connect "$dns":443 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $certificate_file
 
-
 info=$(certtool -i < $certificate_file | egrep "^\s+Subject:")
 CN=$(echo "$info" | grep -o "CN=.*" | cut -d'=' -f2- | cut -d',' -f1 )
 O=$(echo "$info" | grep -o "O=.*" | cut -d'=' -f2- | cut -d',' -f1 )
 L=$(echo "$info" | grep -o "L=.*" | cut -d'=' -f2- | cut -d',' -f1 )
 ST=$(echo "$info" | grep -o "ST=.*" | cut -d'=' -f2- | cut -d',' -f1 )
 C=$(echo "$info" | grep -o "C=.*" | cut -d'=' -f2- | cut -d',' -f1 )
+
+export DAYS_LEFT=$days_left
 
 ver=$( jq -n \
                 --arg dl "$days_left" \
