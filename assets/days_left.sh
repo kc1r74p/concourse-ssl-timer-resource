@@ -16,7 +16,7 @@
 #   255 - DNS resolution failed
 #
 
-certificate_file = $2
+certificate_file=$2
 
 if [ "$#" -eq "1" ]; then
   website="$1"
