@@ -18,7 +18,7 @@
 
 certificate_file=$2
 
-if [ "$#" -eq "1" ]; then
+if [ "$#" -eq "2" ]; then
   website="$1"
   host "$website" >&-
   if [ "$?" -eq "0" ]; then

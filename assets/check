@@ -12,7 +12,6 @@ cat > $payload <&0
 dns=$(jq -r '.source.dns // ""' < $payload)
 
 certificate_file=$(mktemp)
-trap "unlink $certificate_file" EXIT
 echo -n | openssl s_client -servername "$dns" -connect "$dns":443 2>/dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $certificate_file
 
 days_left=$($(dirname $0)/days_left.sh $dns $certificate_file)
@@ -33,4 +32,5 @@ ver=$( jq -n \
                 --arg C "$C" \
                 '[{version: {days: $dl}, metadata: { CN: $CN, O: $O, L: $L, ST: $ST, C: $C } }]' )
 
+trap "unlink $certificate_file" EXIT
 echo $ver >&3

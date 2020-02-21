@@ -17,3 +17,5 @@ RUN chmod 755 /opt/resource/check \
     && chmod +x /opt/resource/days_left.sh \
     && chmod +x /opt/resource/in \
     && chmod +x /opt/resource/out
+
+RUN /opt/resource/check
