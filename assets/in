@@ -22,8 +22,6 @@ L=$(echo "$info" | grep -o "L=.*" | cut -d'=' -f2- | cut -d',' -f1 )
 ST=$(echo "$info" | grep -o "ST=.*" | cut -d'=' -f2- | cut -d',' -f1 )
 C=$(echo "$info" | grep -o "C=.*" | cut -d'=' -f2- | cut -d',' -f1 )
 
-export DAYS_LEFT=$days_left
-
 ver=$( jq -n \
                 --arg dl "$days_left" \
                 --arg CN "$CN" \
@@ -35,3 +33,14 @@ ver=$( jq -n \
 
 trap "unlink $certificate_file" EXIT
 echo $ver >&3
+
+destination=$1
+
+if [ -z "$destination" ]; then
+    echo "usage: $0 <path/to/destination>" >&2
+    exit 1
+fi
+
+mkdir -p $destination
+cd $destination
+echo "$days_left" > $destination/info.txt
