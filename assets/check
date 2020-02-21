@@ -4,7 +4,14 @@ set -e
 exec 3>&1 # make stdout available as fd 3 for the result
 exec 1>&2 # redirect all output to stderr for logging
 
-days_left=$($(dirname $0)/days_left.sh google.com)
+# for jq
+PATH=/usr/local/bin:$PATH
+
+payload=$TMPDIR/ssl-resource
+cat > $payload <&0
+dns=$(jq -r '.source.dns // ""' < $payload)
+
+days_left=$($(dirname $0)/days_left.sh $dns)
 
 ver=$( jq -n \
                 --arg dl "$days_left" \
